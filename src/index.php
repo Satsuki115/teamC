@@ -26,7 +26,7 @@ function h($str) {
                 <div class="card">
                     <?php if(!empty($diary['photo'])): ?>
                     <div class="image-container">
-                    <img src="assets/<?= h($diary['photo']) ?>" class="diary-img">
+                    <img src="assets/img/<?= h($diary['photo']) ?>" class="diary-img">
                     </div>
                     <?php endif; ?>
                     <div class="date"><?= h($diary['date']) ?></div>
