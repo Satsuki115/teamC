@@ -1,3 +1,18 @@
+<?php
+header('Content-Type :application/json; charset=utf-8');
+require_once'../dbconnect.php';
+try{
+    $sql = "SELECT * FROM diary";
+    $stmt = $pdo->query($sql);
+    $diaries = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($diaries);
+
+}catch(PDOException $e){
+    http_response_code(500);
+    echo json_encode(['error' => 'データ取得エラー: ' . $e->getMessage()]);
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
