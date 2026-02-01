@@ -29,6 +29,7 @@ function h($str) {
         }
     </style>
 </head>
+<<<<<<< HEAD
 
 <body class="bg-[#FFE1E6] min-h-screen font-sans text-slate-700">
 
@@ -63,6 +64,17 @@ function h($str) {
                             <div class="w-full h-20 bg-blue-50/50 rounded mb-1"></div>
                         <?php endif; ?>
                         <div class="text-[10px] text-slate-400"><?= h($diary['date']) ?></div>
+=======
+<body>
+    <header>
+        <h2>dashboard</h2>
+        <div class="diary-container">
+            <?php foreach($diaries as $diary): ?>
+                <div class="card">
+                    <?php if(!empty($diary['photo'])): ?>
+                    <div class="image-container">
+                    <img src="assets/img/<?= h($diary['photo']) ?>" class="diary-img">
+>>>>>>> 677053d31181101db41cb98809c1e18930c4be7c
                     </div>
                 <?php endforeach; ?>
             </div>
