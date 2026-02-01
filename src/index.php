@@ -29,7 +29,7 @@ function h($str) {
         }
     </style>
 </head>
-<<<<<<< HEAD
+
 
 <body class="bg-[#FFE1E6] min-h-screen font-sans text-slate-700">
 
@@ -52,34 +52,26 @@ function h($str) {
 <main class="max-w-6xl mx-auto px-4 pb-12">
 
     <section class="bg-[#F7C9D4] rounded-3xl p-6 mb-10 dream-shadow relative">
-        <div class="flex items-center justify-between gap-4 overflow-x-auto py-2">
-            <button class="text-slate-500 bg-white/50 rounded-full w-8 h-8 flex items-center justify-center">＜</button>
+        <div class="flex items-center justify-between gap-4 py-2">
+            
+            <button class="text-slate-500 bg-white/50 rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center">＜</button>
 
-            <div class="flex gap-4">
+            <div class="flex gap-4 overflow-x-auto w-full px-1 scrollbar-hide">
                 <?php foreach($diaries as $diary): ?>
-                    <div class="bg-white/80 rounded-lg p-2 min-w-[120px] text-center shadow-sm">
+                    <div class="flex-shrink-0 flex flex-col bg-white/80 rounded-lg p-2 min-w-[120px] w-[120px] text-center shadow-sm">
+                        
                         <?php if(!empty($diary['photo'])): ?>
                             <img src="./assets/img/<?= h($diary['photo']) ?>" class="w-full h-20 object-cover rounded mb-1" alt="">
                         <?php else: ?>
                             <div class="w-full h-20 bg-blue-50/50 rounded mb-1"></div>
                         <?php endif; ?>
-                        <div class="text-[10px] text-slate-400"><?= h($diary['date']) ?></div>
-=======
-<body>
-    <header>
-        <h2>dashboard</h2>
-        <div class="diary-container">
-            <?php foreach($diaries as $diary): ?>
-                <div class="card">
-                    <?php if(!empty($diary['photo'])): ?>
-                    <div class="image-container">
-                    <img src="assets/img/<?= h($diary['photo']) ?>" class="diary-img">
->>>>>>> 677053d31181101db41cb98809c1e18930c4be7c
+                        
+                        <div class="text-[10px] text-slate-400 mt-auto"><?= h($diary['date']) ?></div>
                     </div>
                 <?php endforeach; ?>
             </div>
 
-            <button class="text-slate-500 bg-white/50 rounded-full w-8 h-8 flex items-center justify-center">＞</button>
+            <button class="text-slate-500 bg-white/50 rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center">＞</button>
         </div>
 
         <a href="http://localhost:8080/admin/diary.php"
