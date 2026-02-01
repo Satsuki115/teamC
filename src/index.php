@@ -48,6 +48,7 @@ function h($str) {
             </nav>
         </div>
     </header>
+    
     <!--<header class="h-24 flex items-center justify-center">
         <h1 class="text-3xl font-bold tracking-widest text-[#F7C9D4]" style="text-shadow: 2px 2px 4px #fff;">PALETTE</h1>
     </header>-->
