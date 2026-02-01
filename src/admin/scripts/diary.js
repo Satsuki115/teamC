@@ -1,53 +1,65 @@
-//ログアウト処理
+// ログアウト処理などはそのままでOK
 document.addEventListener("DOMContentLoaded", function () {
-  // ログインチェック
   const currentUser = localStorage.getItem("currentUser");
   if (!currentUser) {
-    // ログインしていなければログイン画面へ
     window.location.href = "./login.php";
-    return; // ここで処理を止める
+    return;
   }
-
-  // ログアウトボタンを取得
   const logoutBtn = document.querySelector(".header-logout");
-
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function (e) {
-      e.preventDefault(); // デフォルトのリンク動作を防ぐ
-
+      e.preventDefault();
       if (confirm("ログアウトしますか？")) {
-        // localStorageからユーザー情報を削除
         localStorage.removeItem("currentUser");
-
-        // ログイン画面へリダイレクト
         window.location.href = "./login.php";
       }
     });
   }
+  
+  // ★ここでデータ取得を開始します
+  fetchDiaryData();
 });
-
-// ↓↓↓ 以下は既存のカレンダーコード（そのまま） ↓↓↓
 
 const weeks = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const date = new Date();
 let currentYear = date.getFullYear();
 let currentMonth = date.getMonth() + 1;
 
-// サンプルデータ
-const photoData = {
-  "2026/8/2": {
-    img: "https://picsum.photos/400/600?random=1",
-    quote: "風が心地よい午後の読書",
-    highlight:
-      "お気に入りのカフェで、ずっと読みたかった本を読了。アップルパイが絶品でした。",
-  },
-  "2026/8/5": {
-    img: "https://picsum.photos/400/600?random=2",
-    quote: "夕焼けが奇跡のように綺麗だった",
-    highlight:
-      "仕事帰りにふと空を見上げたら、オレンジと紫のグラデーションに感動。",
-  },
-};
+// ★変更点1: 固定データを空の変数に変更
+let photoData = {}; 
+
+// ★変更点2: データをサーバーから取ってくる関数を追加
+async function fetchDiaryData() {
+    try {
+        // さっき作ったPHPファイルにアクセス
+        const response = await fetch('../diary.php'); 
+        const data = await response.json();
+
+        // DBのデータをカレンダー用の形式に変換
+        // DB: date = 20260201 (数値)
+        // JS: key = "2026/2/1" (文字列、0埋めなし)
+        data.forEach(item => {
+            const dateStr = String(item.date); // "20260201"
+            const y = dateStr.substring(0, 4);
+            const m = parseInt(dateStr.substring(4, 6)); // 02 -> 2
+            const d = parseInt(dateStr.substring(6, 8)); // 01 -> 1
+            const key = `${y}/${m}/${d}`;
+
+            photoData[key] = {
+                // 画像パスの調整（adminフォルダから見た assetsフォルダの位置）
+                img: item.photo ? `../assets/img/${item.photo}` : null,
+                quote: item.title,      // タイトルを quote として表示
+                highlight: item.highlight // ハイライトを表示
+            };
+        });
+
+        // データが準備できたらカレンダーを描画
+        init();
+
+    } catch (error) {
+        console.error("データの取得に失敗しました", error);
+    }
+}
 
 function init() {
   renderCalendar(currentYear, currentMonth);
@@ -58,7 +70,6 @@ function renderCalendar(year, month) {
   const grid = document.querySelector("#calendar-grid");
   grid.innerHTML = "";
 
-  // 曜日ヘッダーの描画
   weeks.forEach((w) => {
     const div = document.createElement("div");
     div.classList.add("weekday-label");
@@ -71,7 +82,6 @@ function renderCalendar(year, month) {
   const startDay = startDate.getDay();
   const endDayCount = endDate.getDate();
 
-  // 42マスのセルを生成
   let dayCount = 1;
   for (let i = 0; i < 42; i++) {
     const cell = document.createElement("div");
@@ -81,10 +91,13 @@ function renderCalendar(year, month) {
       const dateKey = `${year}/${month}/${dayCount}`;
       cell.innerHTML = `<span class="day-num">${dayCount}</span>`;
 
-      if (photoData[dateKey]) {
+      // ★変更点3: データがあり、かつ画像がある場合のみ画像を表示
+      if (photoData[dateKey] && photoData[dateKey].img) {
         cell.innerHTML += `<div class="img-box"><img src="${photoData[dateKey].img}"></div>`;
       }
 
+      // データがある場合のみクリックイベントを設定するか、
+      // データがなくても「記録なし」として開くかは自由ですが、今回は元のロジック通りすべてにイベントをつけます
       cell.addEventListener("click", () => openModal(dateKey));
       dayCount++;
     } else {
@@ -93,37 +106,17 @@ function renderCalendar(year, month) {
     grid.appendChild(cell);
   }
 
-  // --- 表示の更新処理 ---
-
-  // 1. 左側サイドバーの大きな数字 (例: 08)
-  document.querySelector("#largeMonth").textContent = String(month).padStart(
-    2,
-    "0",
-  );
-
-  // 2. カレンダー上部の西暦 (例: 2026)
+  document.querySelector("#largeMonth").textContent = String(month).padStart(2, "0");
   document.querySelector("#year-display").textContent = year;
 
-  // 3. カレンダー上部の英語月名 (例: AUGUST)
   const monthNames = [
-    "JANUARY",
-    "FEBRUARY",
-    "MARCH",
-    "APRIL",
-    "MAY",
-    "JUNE",
-    "JULY",
-    "AUGUST",
-    "SEPTEMBER",
-    "OCTOBER",
-    "NOVEMBER",
-    "DECEMBER",
+    "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+    "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER",
   ];
-  document.querySelector("#month-name-display").textContent =
-    monthNames[month - 1];
+  document.querySelector("#month-name-display").textContent = monthNames[month - 1];
 }
 
-// --- モーダル制御ロジック ---
+// --- モーダル制御ロジック (ここはほぼ変更なし) ---
 
 function openModal(dateKey) {
   const mask = document.getElementById("mask");
@@ -131,12 +124,16 @@ function openModal(dateKey) {
   const data = photoData[dateKey];
 
   document.getElementById("modal-date-display").textContent = dateKey;
-  document.getElementById("modal-img").src = data
+  
+  // データがある場合とない場合の表示分け
+  document.getElementById("modal-img").src = (data && data.img)
     ? data.img
-    : "https://via.placeholder.com/400x600?text=No+Memory";
+    : "https://via.placeholder.com/400x600?text=No+Memory"; // デフォルト画像
+
   document.getElementById("modal-quote").textContent = data
     ? data.quote
     : "この日の記録はありません";
+    
   document.getElementById("modal-highlights").textContent = data
     ? data.highlight
     : "思い出を記録してみましょう。";
@@ -155,9 +152,9 @@ function closeModal() {
 function setupModalEvents() {
   const mask = document.getElementById("mask");
   const closeBtn = document.querySelector(".close-btn");
-
-  mask.addEventListener("click", closeModal);
-  closeBtn.addEventListener("click", closeModal);
+  // エラー防止のためのチェックを追加
+  if(mask) mask.addEventListener("click", closeModal);
+  if(closeBtn) closeBtn.addEventListener("click", closeModal);
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeModal();
   });
@@ -184,22 +181,28 @@ function clearParticles() {
 }
 
 // カレンダー送りボタン
-document.querySelector("#prev").addEventListener("click", () => {
-  currentMonth--;
-  if (currentMonth < 1) {
-    currentYear--;
-    currentMonth = 12;
-  }
-  renderCalendar(currentYear, currentMonth);
-});
+const prevBtn = document.querySelector("#prev");
+if(prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 1) {
+        currentYear--;
+        currentMonth = 12;
+      }
+      renderCalendar(currentYear, currentMonth);
+    });
+}
 
-document.querySelector("#next").addEventListener("click", () => {
-  currentMonth++;
-  if (currentMonth > 12) {
-    currentYear++;
-    currentMonth = 1;
-  }
-  renderCalendar(currentYear, currentMonth);
-});
+const nextBtn = document.querySelector("#next");
+if(nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 12) {
+        currentYear++;
+        currentMonth = 1;
+      }
+      renderCalendar(currentYear, currentMonth);
+    });
+}
 
-init();
+// 一番下の init() は削除（fetchDiaryDataの中で呼ぶので不要）
