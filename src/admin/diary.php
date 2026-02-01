@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/reset.css">
     <link rel="stylesheet" href="./styles/diary.css">
     <title>Photo Diary Calendar</title>
 </head>
@@ -11,7 +12,7 @@
         <div class="header-contents">
             <img class="header-logo" src="../assets/img/palette.png" alt="">
             <nav class="header-nav">
-                <a class="header-top" href="">トップ</a>
+                <a class="header-top" href="../index.php">トップ</a>
                 <a class="header-menu" href="">メニュー</a>
                 <a class="header-logout" href="">ログアウト</a>
             </nav>

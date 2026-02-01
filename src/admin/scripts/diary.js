@@ -1,3 +1,33 @@
+//ログアウト処理
+document.addEventListener("DOMContentLoaded", function () {
+  // ログインチェック
+  const currentUser = localStorage.getItem("currentUser");
+  if (!currentUser) {
+    // ログインしていなければログイン画面へ
+    window.location.href = "./login.php";
+    return; // ここで処理を止める
+  }
+
+  // ログアウトボタンを取得
+  const logoutBtn = document.querySelector(".header-logout");
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function (e) {
+      e.preventDefault(); // デフォルトのリンク動作を防ぐ
+
+      if (confirm("ログアウトしますか？")) {
+        // localStorageからユーザー情報を削除
+        localStorage.removeItem("currentUser");
+
+        // ログイン画面へリダイレクト
+        window.location.href = "./login.php";
+      }
+    });
+  }
+});
+
+// ↓↓↓ 以下は既存のカレンダーコード（そのまま） ↓↓↓
+
 const weeks = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const date = new Date();
 let currentYear = date.getFullYear();
