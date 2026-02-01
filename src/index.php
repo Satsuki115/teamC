@@ -48,7 +48,7 @@ function h($str) {
     </div>
 </header>
     
-    <main class="max-w-6xl mx-auto px-4 pb-12">
+<main class="max-w-6xl mx-auto px-4 pb-12">
 
     <section class="bg-[#F7C9D4] rounded-3xl p-6 mb-10 dream-shadow relative">
         <div class="flex items-center justify-between gap-4 overflow-x-auto py-2">
@@ -70,10 +70,6 @@ function h($str) {
             <button class="text-slate-500 bg-white/50 rounded-full w-8 h-8 flex items-center justify-center">＞</button>
         </div>
 
-
-        <button class="text-slate-500 bg-white/50 rounded-full w-8 h-8 flex items-center justify-center">＞</button>
-        </div>
-
         <a href="http://localhost:8080/admin/diary.php"
             class="absolute bottom-4 right-6 bg-[#B9D8E8] text-slate-600 px-4 py-1 rounded-full text-sm shadow-sm block">
             もっと見る
@@ -86,7 +82,6 @@ function h($str) {
             <div class="mb-8">
                 <input type="text" name="title" placeholder="タイトルを入力" class="text-3xl font-bold border-b border-slate-200 pb-2 mb-4 placeholder:text-slate-300">
             </div>
-
 
             <div class="space-y-10">
                 <div>
@@ -113,7 +108,7 @@ function h($str) {
             </div>
         </form>
 
-        </div>
-    </main>
+    </div>
+</main>
 </body>
 </html>
